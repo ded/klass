@@ -43,13 +43,11 @@
     fn.statics = statics;
     fn.prototype.constructor = sub;
     fn.prototype.constructor.sup = sup;
-
     fn.prototype.supr = function () {
       if (this.sup.prototype[this._name]) {
         return this.sup.prototype[this._name].apply(this, arguments);
       }
     };
-
     return fn;
   }
 

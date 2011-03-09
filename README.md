@@ -64,14 +64,16 @@ browser environment
     <script type="text/javascript">
       // exposes 'klass' and 'extend'
       var Foo = klass(fn);
-      var Bar = extend(Foo, klass(fn))
+      var Bar = extend(Foo, klass(fn));
+      implement(Bar, { ... });
     </script>
 
 as a module
 
     var oo = require('path/to/klass'),
         klass = oo.klass,
-        extend = oo.extend;
+        extend = oo.extend,
+        implement = oo.implement;
 
 Contributors
 ------------
