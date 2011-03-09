@@ -44,3 +44,8 @@ as a module
     var oo = require('path/to/klass'),
         klass = oo.klass,
         extend = oo.extend;
+
+Contributors
+------------
+  * [Dustin Diaz](https://github.com/polvero)
+  * [Jacob Thornton](https://github.com/jacobthornton)
