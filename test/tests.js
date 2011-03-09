@@ -67,9 +67,10 @@ sink('Klass', function (test, ok, before, after) {
     (new sub2()).bah();
   });
 
-  test('should implement a wrapper method for mixins', 3, function () {
+  test('should implement a wrapper method for mixins', 5, function () {
+    var thingCalled = 0;
     base.methods({
-      thing: function () {
+      thing: function () {;
         ok(true, 'base thing() gets called');
       }
     });
@@ -77,16 +78,22 @@ sink('Klass', function (test, ok, before, after) {
       .methods({
         thing: function () {
           this.supr();
+          ok((++thingCalled == 1), 'calls middleware only once');
         }
       });
 
     var inst = new sub('hello');
+
     inst.thing();
 
     implement(inst, {
       thing: function (n) {
         this.supr();
         ok(true, 'called implementer');
+        this.booooshr();
+      },
+      booooshr: function () {
+        ok(true, 'called booshr');
       }
     });
 

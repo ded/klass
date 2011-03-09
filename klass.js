@@ -59,14 +59,16 @@
   }
 
   function implement(inst, o) {
-    inst.sup = inst.constructor.sup;
-    for (var k in o) {!function() {
-      if (o.hasOwnProperty(k)) {
-        inst[k] = function () {
-          o[k].apply(inst, arguments);
-        };
-      }
-    }()}
+    inst.sup = inst.constructor.prototype.constructor.sup;
+    function f(n) {
+      return function() {
+        n.apply(inst, arguments);
+      };
+    }
+
+    for (var k in o) {
+      o.hasOwnProperty(k) && (inst[k] = f(o[k]));
+    }
   }
 
   if (typeof module !== 'undefined' && module.exports) {
