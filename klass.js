@@ -58,14 +58,27 @@
     return fn;
   }
 
+  function implement(inst, o) {
+    inst.sup = inst.constructor.sup;
+    for (var k in o) {!function() {
+      if (o.hasOwnProperty(k)) {
+        inst[k] = function () {
+          o[k].apply(inst, arguments);
+        };
+      }
+    }()}
+  }
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
       klass: klass,
-      extend: extend
+      extend: extend,
+      implement: implement
     };
   } else {
     context.klass = klass;
     context.extend = extend;
+    context.implement = implement;
   }
 
 }(this);
