@@ -1,3 +1,6 @@
 [submodule "build/uglify"]
 	path = build/uglify
 	url = https://github.com/mishoo/UglifyJS.git
+[submodule "build/sink"]
+	path = build/sink
+	url = git@github.com:polvero/sink-test.git

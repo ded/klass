@@ -5,21 +5,6 @@
   */
 !function (context) {
 
-  function expose() {
-    for (var i=0; i < arguments.length; i++) {
-      context[arguments[i].name] = arguments[i];
-    };
-  }
-
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      klass: klass,
-      extend: extend
-    };
-  } else {
-    expose(klass, extend);
-  }
-
   function methods(o) {
     for (var k in o) {
       o.hasOwnProperty(k) && wrapper.call(this, o, k);
@@ -72,4 +57,15 @@
 
     return fn;
   }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      klass: klass,
+      extend: extend
+    };
+  } else {
+    context.klass = klass;
+    context.extend = extend;
+  }
+
 }(this);
