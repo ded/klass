@@ -1,6 +1,6 @@
-Klass.js
+Klass
 -----
-An expressive JavaScript Class provider designed to provide a classical interface to prototypal inheritance.
+An expressive, cross platform JavaScript Class provider with a slick, classical interface to prototypal inheritance.
 
     var Person = klass(function (name) {
       this.name = name;
