@@ -1,0 +1,9 @@
+{
+  "name": "klass",
+  "description": "JavaScript Class provider designed to provide a classical interface to prototypal inheritance",
+  "version": "0.0.1",
+  "authors": ["Dustin Diaz <@ded>", "Jacob Thornton <@fat>"],
+  "keywords": ["inheritance", "javascript", "classes", "extends"],
+  "main": "./klass.js",
+  "engines": { "node": ">= 0.0.1" }
+}

@@ -28,7 +28,7 @@ An expressive JavaScript Class provider designed to provide a classical interfac
 
     new SuperHuman('Zelda').walk()
 
-Klass is [Common JS](http://commonjs.org) compliant provides the [Modules 1.1](http://wiki.commonjs.org/wiki/Modules/1.1) interface to allow two flavors of development. See the implementations below:
+Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.1](http://wiki.commonjs.org/wiki/Modules/1.1) interface to allow two flavors of development. See the implementations below:
 
 browser environment
 
