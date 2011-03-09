@@ -75,6 +75,12 @@ as a module
         extend = oo.extend,
         implement = oo.implement;
 
+Running the tests
+-----------------
+If you want to see shiny passing tests, run the _tests_ make command
+
+    % make tests
+
 Contributors
 ------------
   * [Dustin Diaz](https://github.com/polvero)
