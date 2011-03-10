@@ -2,10 +2,7 @@ if (typeof module !== 'undefined' && module.exports) {
   var sink = require('../build/sink'),
       start = sink.start,
       sink = sink.sink;
-  var oo = require('../klass'),
-      klass = oo.klass,
-      extend = oo.extend,
-      implement = oo.implement;
+  var klass = require('../klass');
 }
 
 sink('Klass', function (test, ok, before, after) {
@@ -21,6 +18,21 @@ sink('Klass', function (test, ok, before, after) {
     ok((new base(5).n == 5), 'created base class');
   });
 
+  test('should allow optional hash as constructor for methods', 1, function () {
+    var objectKlass = klass({
+      get: function () {
+        return this.foo;
+      },
+
+      set: function (foo) {
+        this.foo = foo;
+        return this;
+      }
+
+    });
+    ok((new objectKlass().set('booshr').get() == 'booshr'), 'booshr is found');
+  });
+
   test('should create methods', 1, function () {
     base.methods({
       get: function () {
@@ -31,7 +43,7 @@ sink('Klass', function (test, ok, before, after) {
   });
 
   test('should inherit from superclass when creating subclass', 1, function () {
-    var sub = extend(base);
+    var sub = base.extend();
     ok((new sub('boosh').n == 'boosh'), 'inherits property from base');
   });
 
@@ -45,7 +57,7 @@ sink('Klass', function (test, ok, before, after) {
         }
       });
 
-    var sub1 = extend(base, function(){
+    var sub1 = base.extend(function() {
       ok(++constructTimes == 1, 'called sub1 constructor first');
     })
       .methods({
@@ -55,9 +67,9 @@ sink('Klass', function (test, ok, before, after) {
         }
       });
 
-    var sub2 = extend(sub1, klass(function(){
+    var sub2 = sub1.extend(function () {
       ok(++constructTimes == 2, 'called sub2 constructor second');
-    }))
+    })
       .methods({
         bah: function () {
           this.supr();
@@ -74,8 +86,8 @@ sink('Klass', function (test, ok, before, after) {
         ok(true, 'base thing() gets called');
       }
     });
-    var sub = extend(base)
-      .methods({
+
+    var sub = base.extend({
         thing: function () {
           this.supr();
           ok((++thingCalled == 1), 'calls middleware only once');
@@ -86,7 +98,7 @@ sink('Klass', function (test, ok, before, after) {
 
     inst.thing();
 
-    implement(inst, {
+    inst.implement({
       thing: function (n) {
         this.supr();
         ok(true, 'called implementer');
@@ -95,9 +107,7 @@ sink('Klass', function (test, ok, before, after) {
       booooshr: function () {
         ok(true, 'called booshr');
       }
-    });
-
-    inst.thing();
+    }).thing();
 
   });
 

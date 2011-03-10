@@ -31,57 +31,51 @@
   }
 
   function klass(fn) {
-    fn = fn || noop;
+    var o = typeof fn != 'function' && fn;
+    fn = (typeof fn == 'function') ? fn : noop;
+
     fn.methods = methods;
     fn.statics = statics;
-    return fn;
+    fn.extend = extend;
+    fn.prototype.implement = implement;
+    return o ? fn.methods(o) : fn;
   }
 
-  function extend(sup, sub) {
-    sub = sub || noop;
+  function extend(sub) {
+    var sup = this;
 
     function fn() {
       sup.apply(this, arguments);
-      sub.apply(this, arguments);
+      typeof sub == 'function' && sub.apply(this, arguments);
     }
 
-    var F = function(){};
+    var F = function (){};
     F.prototype = sup.prototype;
     fn.prototype = new F();
-    fn.methods = methods;
-    fn.statics = statics;
-    fn.prototype.constructor = sub;
+    klass(fn);
+
+
+    fn.prototype.constructor = fn;
     fn.prototype.constructor.sup = sup;
     fn.prototype.supr = function () {
       if (this.sup.prototype[this._name]) {
         return this.sup.prototype[this._name].apply(this, arguments);
       }
     };
-    return fn;
+
+    return (typeof sub != 'function' && sub && fn.methods(sub)) || fn;
   }
 
-  function implement(inst, o) {
-    inst.sup = inst.constructor.prototype.constructor.sup;
-    function f(n) {
-      return function() {
-        n.apply(inst, arguments);
-      };
-    }
-    for (var k in o) {
-      o.hasOwnProperty(k) && (inst[k] = f(o[k]));
-    }
+  function implement(o) {
+    this.constructor.methods(o);
+    return this;
   }
+
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      klass: klass,
-      extend: extend,
-      implement: implement
-    };
+    module.exports = klass;
   } else {
     context.klass = klass;
-    context.extend = extend;
-    context.implement = implement;
   }
 
 }(this);
