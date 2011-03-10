@@ -31,7 +31,7 @@ sink('Klass', function (test, ok, before, after) {
   });
 
   test('should inherit from superclass when creating subclass', 1, function () {
-    var sub = extend(base, klass(function (n) {}));
+    var sub = extend(base);
     ok((new sub('boosh').n == 'boosh'), 'inherits property from base');
   });
 
@@ -45,9 +45,9 @@ sink('Klass', function (test, ok, before, after) {
         }
       });
 
-    var sub1 = extend(base, klass(function(){
+    var sub1 = extend(base, function(){
       ok(++constructTimes == 1, 'called sub1 constructor first');
-    }))
+    })
       .methods({
         bah: function() {
           this.supr();
@@ -74,7 +74,7 @@ sink('Klass', function (test, ok, before, after) {
         ok(true, 'base thing() gets called');
       }
     });
-    var sub = extend(base, klass(function() {}))
+    var sub = extend(base)
       .methods({
         thing: function () {
           this.supr();

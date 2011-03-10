@@ -5,6 +5,8 @@
   */
 !function (context) {
 
+  function noop() {}
+
   function methods(o) {
     for (var k in o) {
       o.hasOwnProperty(k) && wrapper.call(this, o, k);
@@ -29,12 +31,14 @@
   }
 
   function klass(fn) {
+    fn = fn || noop;
     fn.methods = methods;
     fn.statics = statics;
     return fn;
   }
 
   function extend(sup, sub) {
+    sub = sub || noop;
 
     function fn() {
       sup.apply(this, arguments);
