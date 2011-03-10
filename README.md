@@ -81,6 +81,12 @@ If you want to see shiny passing tests, run the _tests_ make command
 
     % make tests
 
+Install the Package!
+--------------------
+By far the easiest way to get started with klass is to simply install the package and hit the ground running!
+
+    % npm install klass
+
 Contributors
 ------------
   * [Dustin Diaz](https://github.com/polvero)
