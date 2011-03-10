@@ -19,9 +19,9 @@ creating a Class...
 
 Subclassing...
 
-    var SuperHuman = extend(Person, klass(function (name) {
+    var SuperHuman = Person.extend(function (name) {
       // super class is automagically called
-    }))
+    })
       .methods({
         walk: function() {
           this.supr();
@@ -37,15 +37,16 @@ Subclassing...
 Implementing...
 (because sometimes you want to overwrite OR mixin an instance method)
 
-    var Alien = extend(SuperHuman, klass(function (name) {
+    // note you can optionally pass an object literal to extend too ;)
+    var Alien = SuperHuman.extend({
       beem: function() {
         this.supr();
         // beem into space
       }
-    }));
+    });
 
     if (beamIsDown) {
-      implement(Alien, {
+      Alien.implement({
         beam: function() {
           this.supr();
           // fallback to jets
@@ -61,19 +62,20 @@ Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.
 browser environment
 
     <script src="path/to/klass.js"></script>
+    <!-- klass() is exposed to context -->
+
     <script type="text/javascript">
-      // exposes 'klass' and 'extend'
-      var Foo = klass(fn);
-      var Bar = extend(Foo, klass(fn));
-      implement(Bar, { ... });
+      var Foo = klass(fn1);
+      var Bar = Foo.extend(fn2);
+      Bar.implement({ ... });
     </script>
 
 as a module
 
-    var oo = require('path/to/klass'),
-        klass = oo.klass,
-        extend = oo.extend,
-        implement = oo.implement;
+    // your-application.js
+    var klass = require('path/to/klass');
+
+    var Foo = klass(...);
 
 Running the tests
 -----------------
@@ -88,7 +90,7 @@ By far the easiest way to get started with klass is to simply install the packag
     % npm install klass
 
     # in your Node application
-    # var oo = require('klass')
+    # var klass = require('klass')
 
 Contributors
 ------------
