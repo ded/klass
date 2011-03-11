@@ -6,12 +6,12 @@
 !function(context){
   var fnTest = /xyz/.test(function(){xyz;}) ? /\bsupr\b/ : /.*/, noop = function(){};
 
-  this.klass = function(o){
+  function klass(o){
     var methods, _constructor = typeof o == 'function' ? (methods = {}, o) : (methods = o, noop);
-    return klass.extend.call(_constructor, o);
+    return extend.call(_constructor, o);
   };
 
-  klass.extend = function(o) {
+  function extend(o) {
 
     var supr = this,
         _methods,
