@@ -3,74 +3,54 @@
   * https://github.com/polvero/klass
   * MIT License
   */
-!function (context) {
+!function(context){
+  var fnTest = /xyz/.test(function(){xyz;}) ? /\bsupr\b/ : /.*/, noop = function(){};
 
-  function noop() {}
+  this.klass = function(o){
+    var methods, _constructor = typeof o == 'function' ? (methods = {}, o) : (methods = o, noop);
+    return klass.extend.call(_constructor, o);
+  };
 
-  function methods(o) {
-    for (var k in o) {
-      o.hasOwnProperty(k) && wrapper.call(this, o, k);
-    }
-    return this;
-  }
+  klass.extend = function(o) {
 
-  function statics(o) {
-    for (var k in o) {
-      o.hasOwnProperty(k) && (this[k] = o[k]);
-    }
-    return this;
-  }
+    var supr = this,
+        _methods,
+        _constructor = typeof o == 'function' ? (_methods = {}, o) : (_methods = o, this),
+        fn = function fn() {
+          supr.apply(this, arguments);
+          _constructor.apply(this, arguments);
+        };
 
-  function wrapper (o, k) {
-    var sup = this.prototype.constructor.sup;
-    this.prototype[k] = function () {
-      this._name = k;
-      this.sup = sup;
-      return o[k].apply(this, arguments);
-    };
-  }
+    var prototype = new noop();
 
-  function klass(fn) {
-    var o = typeof fn != 'function' && fn;
-    fn = (typeof fn == 'function') ? fn : noop;
-
-    fn.methods = methods;
-    fn.statics = statics;
-    fn.extend = extend;
-    fn.prototype.implement = implement;
-    return o ? fn.methods(o) : fn;
-  }
-
-  function extend(sub) {
-    var sup = this;
-
-    function fn() {
-      sup.apply(this, arguments);
-      typeof sub == 'function' && sub.apply(this, arguments);
-    }
-
-    var F = function (){};
-    F.prototype = sup.prototype;
-    fn.prototype = new F();
-    klass(fn);
-
-
-    fn.prototype.constructor = fn;
-    fn.prototype.constructor.sup = sup;
-    fn.prototype.supr = function () {
-      if (this.sup.prototype[this._name]) {
-        return this.sup.prototype[this._name].apply(this, arguments);
+    fn.methods = function (prop) {
+      for (var name in prop) {
+        prototype[name] = typeof prop[name] == "function" &&
+          typeof supr.prototype[name] == "function" && fnTest.test(prop[name]) ?
+          (function(name, fn){
+            return function() {
+              this.supr = supr.prototype[name];
+              return fn.apply(this, arguments);
+            };
+          })(name, prop[name]) :
+          prop[name];
       }
-    };
 
-    return (typeof sub != 'function' && sub && fn.methods(sub)) || fn;
-  }
+      fn.prototype = prototype;
+      return this;
+    }
 
-  function implement(o) {
-    this.constructor.methods(o);
-    return this;
-  }
+    fn.methods.call(fn, _methods).constructor = this;
+    fn.extend = arguments.callee;
+    fn.prototype.implement = fn.statics = function (o) {
+      for (var k in o) {
+        o.hasOwnProperty(k) && (this[k] = o[k]);
+      }
+      return this;
+    }
 
+    return fn;
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = klass;

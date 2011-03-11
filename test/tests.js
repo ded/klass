@@ -2,20 +2,21 @@ if (typeof module !== 'undefined' && module.exports) {
   var sink = require('../build/sink'),
       start = sink.start,
       sink = sink.sink;
-  var klass = require('../klass');
+  var klass = require('../src/klass');
 }
 
-sink('Klass', function (test, ok, before, after) {
+sink('klass', function (test, ok, before, after) {
 
-  var base;
+
+  var Base;
   before(function () {
-    base = klass(function (n) {
+    Base = klass(function (n) {
       this.n = n;
     });
   });
 
-  test('should create a base class', 1, function () {
-    ok((new base(5).n == 5), 'created base class');
+  test('should create a Base class', 1, function () {
+    ok((new Base(5).n == 5), 'created Base class');
   });
 
   test('should allow optional hash as constructor for methods', 1, function () {
@@ -28,73 +29,72 @@ sink('Klass', function (test, ok, before, after) {
         this.foo = foo;
         return this;
       }
-
     });
     ok((new objectKlass().set('booshr').get() == 'booshr'), 'booshr is found');
   });
 
   test('should create methods', 1, function () {
-    base.methods({
+    Base.methods({
       get: function () {
         return this.n;
       }
     });
-    ok((new base('hello').get() == 'hello'), 'created get() method');
+    ok((new Base('hello').get() == 'hello'), 'created get() method');
   });
 
-  test('should inherit from superclass when creating subclass', 1, function () {
-    var sub = base.extend();
-    ok((new sub('boosh').n == 'boosh'), 'inherits property from base');
+  test('should inherit from superclass when creating Subclass', 1, function () {
+    var Sub = Base.extend();
+    ok((new Sub('boosh').n == 'boosh'), 'inherits property from Base');
   });
 
-  test('should call super methods from sub methods', 5, function () {
+  test('should call super methods from Sub methods', 5, function () {
     var methodTimes = 0;
     var constructTimes = 0;
-    base
+    Base
       .methods({
         bah: function () {
-          ok(++methodTimes == 1, 'called base method first');
+          ok(++methodTimes == 1, 'called Base method first');
         }
       });
 
-    var sub1 = base.extend(function() {
-      ok(++constructTimes == 1, 'called sub1 constructor first');
+    var Sub1 = Base.extend(function() {
+      ok(++constructTimes == 1, 'called Sub1 constructor first');
     })
       .methods({
         bah: function() {
           this.supr();
-          ok(++methodTimes == 2, 'called sub1 method second');
+          ok(++methodTimes == 2, 'called Sub1 method second');
         }
       });
 
-    var sub2 = sub1.extend(function () {
-      ok(++constructTimes == 2, 'called sub2 constructor second');
+    var Sub2 = Sub1.extend(function () {
+      ok(++constructTimes == 2, 'called Sub2 constructor second');
     })
       .methods({
         bah: function () {
           this.supr();
-          ok(++methodTimes == 3, 'called sub2 method third');
+          ok(++methodTimes == 3, 'called Sub2 method third');
         }
       });
-    (new sub2()).bah();
+    (new Sub2()).bah();
   });
 
   test('should implement a wrapper method for mixins', 5, function () {
     var thingCalled = 0;
-    base.methods({
+    Base.methods({
       thing: function () {;
-        ok(true, 'base thing() gets called');
+        ok(true, 'Base thing() gets called');
       }
     });
 
-    var sub = base.extend({
+    var Sub = Base.extend({
         thing: function () {
           this.supr();
           ok((++thingCalled == 1), 'calls middleware only once');
         }
       });
 
-    var inst = new sub('hello');
+    var inst = new Sub('hello');
 
     inst.thing();
 
@@ -111,6 +111,20 @@ sink('Klass', function (test, ok, before, after) {
 
   });
 
+  test('should be able to set statics', 1, function () {
+    Base.statics({
+      'dead': 'obese'
+    });
+    ok(Base.dead == 'obese', 'dead should be a static value of obese')
+  });
+
+  test('should be instances of their classes', 2, function () {
+    var Sub = Base.extend(),
+    b = new Base();
+    s = new Sub();
+    ok(s instanceof Sub, 's is instance of Sub');
+    ok(b instanceof Base, 'b is instance of Base');
+  });
 
 });
 start();
