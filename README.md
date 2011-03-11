@@ -89,8 +89,8 @@ By far the easiest way to get started with klass is to simply install the packag
 
     % npm install klass
 
-    # in your Node application
-    # var klass = require('klass')
+    // in your Node application
+    var klass = require('klass')
 
 Contributors
 ------------
