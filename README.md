@@ -39,9 +39,9 @@ Implementing...
 
     // note you can optionally pass an object literal to extend too ;)
     var Alien = SuperHuman.extend({
-      beem: function() {
+      beam: function() {
         this.supr();
-        // beem into space
+        // beam into space
       }
     });
 
