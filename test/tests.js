@@ -15,6 +15,23 @@ sink('klass', function (test, ok, before, after) {
     });
   });
 
+  test('should not call constructor twice', 2, function () {
+    var called = 0;
+    var thing = klass(function () {
+      ok(++called == 1, 'constructor called only once');
+      if (called == 2) {
+        clearTimeout(timer);
+      }
+    });
+
+    new thing();
+
+    var timer = setTimeout(function () {
+      ok(true, 'second constructor never called');
+    }, 200);
+
+  });
+
   test('should create a Base class', 1, function () {
     ok((new Base(5).n == 5), 'created Base class');
   });
