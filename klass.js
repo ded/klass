@@ -13,16 +13,16 @@
 
   function klass(o){
     var methods, _constructor = isFn(o) ? (methods = {}, o) : (methods = o, noop);
-    return extend.call(_constructor, o);
+    return extend.call(_constructor, o, 1);
   };
 
-  function extend(o) {
+  function extend(o, fromSub) {
 
     var supr = this,
         _methods,
         _constructor = isFn(o) ? (_methods = {}, o) : (_methods = o, this),
-        fn = function fn() {
-          supr.apply(this, arguments);
+        fn = function () {
+          fromSub || supr.apply(this, arguments);
           _constructor.apply(this, arguments);
         },
         prototype = new noop();
