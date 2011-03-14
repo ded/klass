@@ -143,5 +143,45 @@ sink('klass', function (test, ok, before, after) {
     ok(b instanceof Base, 'b is instance of Base');
   });
 
+  test('base constructor not called twice when no constructor used in sub', 2, function () {
+    var called = 0;
+    var Base = klass(function () {
+      ok(++called == 1, 'called only once');
+      if (called > 1) {
+        clearTimeout(timer);
+      }
+    });
+
+    var Sub = Base.extend();
+
+    new Sub();
+    var timer = setTimeout(function () {
+      ok(true, 'didnt call base twice');
+    }, 50);
+  });
+
+  test('base constructor not called twice when object used in sub', 2, function () {
+    var called = 0;
+    var Base = klass(function () {
+      ok(++called == 1, 'called only once');
+      if (called > 1) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    });
+
+    var timer = setTimeout(function () {
+      ok(true, 'didnt call base twice');
+    }, 100);
+
+
+    var Sub = Base.extend({
+      thing: function () { },
+    });
+
+    new Sub();
+  });
+
+
 });
 start();

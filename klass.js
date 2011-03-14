@@ -17,12 +17,12 @@
   };
 
   function extend(o, fromSub) {
-
+    o = o || noop;
     var supr = this,
         _methods,
         _constructor = isFn(o) ? (_methods = {}, o) : (_methods = o, this),
         fn = function () {
-          fromSub || supr.apply(this, arguments);
+          fromSub || isFn(o) && supr.apply(this, arguments);
           _constructor.apply(this, arguments);
         },
         prototype = new noop();
