@@ -40,12 +40,33 @@
 
     fn.methods.call(fn, _methods).constructor = this;
     fn.extend = arguments.callee;
-    fn[proto].implement = fn.statics = function (o) {
+
+    if (!fromSub) {
+      for (var key in supr.prototype) {
+        fn[proto][key] = supr.prototype[key];
+      }
+    }
+
+    fn.statics = function (o) {
       for (var k in o) {
         o.hasOwnProperty(k) && (this[k] = o[k]);
       }
       return this;
+    };
+
+    function implement(name, fn) {
+      return function () {
+        this.supr = supr[proto][name];
+        return fn.apply(this, arguments);
+      };
     }
+
+    fn[proto].implement = function (o) {
+      for (var k in o) {
+        o.hasOwnProperty(k) && (this[k] = implement(k, o[k]));
+      }
+      return this;
+    };
 
     return fn;
   };
@@ -57,3 +78,10 @@
   }
 
 }(this);
+
+if (typeof module !== 'undefined' && module.exports) {
+  var sink = require('../build/sink'),
+      start = sink.start,
+      sink = sink.sink;
+  var klass = require('../src/klass');
+}

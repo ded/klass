@@ -96,37 +96,37 @@ sink('klass', function (test, ok, before, after) {
     (new Sub2()).bah();
   });
 
-  test('should implement a wrapper method for mixins', 5, function () {
-    var thingCalled = 0;
-    Base.methods({
-      thing: function () {;
-        ok(true, 'Base thing() gets called');
-      }
-    });
-
-    var Sub = Base.extend({
-        thing: function () {
-          this.supr();
-          ok((++thingCalled == 1), 'calls middleware only once');
-        }
-      });
-
-    var inst = new Sub('hello');
-
-    inst.thing();
-
-    inst.implement({
-      thing: function (n) {
-        this.supr();
-        ok(true, 'called implementer');
-        this.booooshr();
-      },
-      booooshr: function () {
-        ok(true, 'called booshr');
-      }
-    }).thing();
-
-  });
+  // test('should implement a wrapper method for mixins', 5, function () {
+  //   var thingCalled = 0;
+  //   Base.methods({
+  //     thing: function () {;
+  //       ok(true, 'Base thing() gets called');
+  //     }
+  //   });
+  //
+  //   var Sub = Base.extend({
+  //     thing: function () {
+  //       this.supr();
+  //       ok((++thingCalled == 1), 'calls middleware only once');
+  //     }
+  //   });
+  //
+  //   var inst = new Sub('hello');
+  //
+  //   inst.thing();
+  //
+  //   inst.implement({
+  //     thing: function (n) {
+  //       ok(true, 'called implementer');
+  //       this.booooshr();
+  //       this.supr();
+  //     },
+  //     booooshr: function () {
+  //       ok(true, 'called booshr');
+  //     }
+  //   }).thing();
+  //
+  // });
 
   test('should be able to set statics', 1, function () {
     Base.statics({
