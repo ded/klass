@@ -54,16 +54,16 @@
       return this;
     };
 
-    function implement(name, fn) {
+    function implement(name, f) {
       return function () {
-        this.supr = supr[proto][name];
-        return fn.apply(this, arguments);
+        f.apply(this, arguments);
+        return this;
       };
     }
 
-    fn[proto].implement = function (o) {
-      for (var k in o) {
-        o.hasOwnProperty(k) && (this[k] = implement(k, o[k]));
+    fn[proto].implement = function (ob) {
+      for (var k in ob) {
+        this[k] = implement(k, ob[k]);
       }
       return this;
     };

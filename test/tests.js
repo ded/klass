@@ -96,16 +96,55 @@ sink('klass', function (test, ok, before, after) {
     (new Sub2()).bah();
   });
 
-  // test('should implement a wrapper method for mixins', 5, function () {
+  test('should implement a wrapper method for mixins', 5, function () {
+    var thingCalled = 0;
+    Base.methods({
+      thing: function () {;
+        console.log('base thing()');
+        ok(true, 'Base thing() gets called');
+      }
+    });
+
+    var Sub = Base.extend().methods({
+      thing: function () {
+        console.log('middleware thing()');
+        this.supr();
+        ok((++thingCalled == 1), 'calls middleware only once');
+      }
+    });
+
+    var inst = new Sub('hello');
+
+    inst.thing();
+
+    inst.implement({
+      thing: function (n) {
+        console.log('thing()');
+        ok(true, 'called implementer');
+        this.supr();
+        this.booooshr();
+      },
+      booooshr: function () {
+        console.log('booshr()');
+        ok(true, 'called booshr');
+      }
+    }).thing();
+
+  });
+
+
+  // test('same thing but extend taking object literal', 5, function () {
   //   var thingCalled = 0;
   //   Base.methods({
   //     thing: function () {;
+  //       console.log('base thing()');
   //       ok(true, 'Base thing() gets called');
   //     }
   //   });
   //
   //   var Sub = Base.extend({
   //     thing: function () {
+  //       console.log('middleware thing()');
   //       this.supr();
   //       ok((++thingCalled == 1), 'calls middleware only once');
   //     }
@@ -117,16 +156,19 @@ sink('klass', function (test, ok, before, after) {
   //
   //   inst.implement({
   //     thing: function (n) {
+  //       console.log('thing()');
   //       ok(true, 'called implementer');
-  //       this.booooshr();
   //       this.supr();
+  //       this.booooshr();
   //     },
   //     booooshr: function () {
+  //       console.log('booshr()');
   //       ok(true, 'called booshr');
   //     }
   //   }).thing();
   //
   // });
+
 
   test('should be able to set statics', 1, function () {
     Base.statics({
