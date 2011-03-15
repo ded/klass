@@ -78,10 +78,3 @@
   }
 
 }(this);
-
-if (typeof module !== 'undefined' && module.exports) {
-  var sink = require('../build/sink'),
-      start = sink.start,
-      sink = sink.sink;
-  var klass = require('../src/klass');
-}

@@ -1,7 +1,7 @@
 {
   "name": "klass",
   "description": "JavaScript Class provider designed to provide a classical interface to prototypal inheritance",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "http://dustindiaz.com/klass",
   "authors": ["Dustin Diaz", "Jacob Thornton"],
   "repository": {
