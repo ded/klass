@@ -4,7 +4,7 @@ An expressive, cross platform JavaScript Class provider with a slick, classical 
 
 Interface
 ---------
-<h2>creating a Class...</h2>
+<h3>creating a Class...</h3>
 
     var Person = klass(function (name) {
       this.name = name;
@@ -17,7 +17,7 @@ Interface
         walk: function () {}
       });
 
-<h2>Subclassing...</h2>
+<h3>Subclassing...</h3>
 
     var SuperHuman = Person.extend(function (name) {
       // super class is automagically called
@@ -34,7 +34,7 @@ Interface
 
     new SuperHuman('Zelda').walk()
 
-<h2>Implementing...</h2>
+<h3>Implementing...</h3>
 (because sometimes you want to overwrite OR mixin an instance method)
 
     // note you can optionally pass an object literal to extend too ;)
@@ -59,7 +59,7 @@ Environments
 ------------
 Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.1](http://wiki.commonjs.org/wiki/Modules/1.1) interface to allow two flavors of development. See the implementations below:
 
-<h2>browser environment</h2>
+<h3>browser environment</h3>
 
     <script src="path/to/klass.js"></script>
     <!-- klass() is exposed to context -->
@@ -70,7 +70,7 @@ Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.
       Bar.implement({ ... });
     </script>
 
-<h2>as a module</h2>
+<h3>as a module</h3>
 
     // your-application.js
     var klass = require('path/to/klass');
