@@ -82,7 +82,7 @@ sink('klass', function (test, ok, before, after) {
   test('should implement a wrapper method for mixins', 5, function () {
     var thingCalled = 0;
     Base.methods({
-      thing: function () {;
+      thing: function () {
         ok(true, 'Base thing() gets called');
       }
     });
@@ -124,6 +124,33 @@ sink('klass', function (test, ok, before, after) {
     s = new Sub();
     ok(s instanceof Sub, 's is instance of Sub');
     ok(b instanceof Base, 'b is instance of Base');
+  });
+
+  test('should access correct supr methods', 4, function(){
+    Base.methods({
+      first: function () {
+        return 'first';
+      },
+      second: function () {
+        return 'second';
+      }
+    });
+
+    var Sub = Base.extend({
+      first: function () {
+        this.second();
+        return this.supr();
+      },
+      second: function(){
+        return this.supr();
+      }
+    });
+
+    ok(new Base().first() == 'first', 's is instance of Sub');
+    ok(new Base().second() == 'second', 'b is instance of Base');
+    ok(new Sub().first() == 'first', 's is instance of Sub');
+    ok(new Sub().second() == 'second', 'b is instance of Base');
+
   });
 
 });
