@@ -51,7 +51,7 @@
     fn.methods.call(fn, _methods).constructor = this;
     fn.extend = arguments.callee;
 
-    fn.prototype.implement = fn.statics = function (o) {
+    fn[proto].implement = fn.statics = function (o) {
       process(this, o, supr);
       return this;
     };
