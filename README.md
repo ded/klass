@@ -4,7 +4,7 @@ An expressive, cross platform JavaScript Class provider with a slick, classical 
 
 Interface
 ---------
-creating a Class...
+<h3>creating a Class...</h3>
 
     var Person = klass(function (name) {
       this.name = name;
@@ -17,7 +17,7 @@ creating a Class...
         walk: function () {}
       });
 
-Subclassing...
+<h3>Subclassing...</h3>
 
     var SuperHuman = Person.extend(function (name) {
       // super class is automagically called
@@ -34,7 +34,7 @@ Subclassing...
 
     new SuperHuman('Zelda').walk()
 
-Implementing...
+<h3>Implementing...</h3>
 (because sometimes you want to overwrite OR mixin an instance method)
 
     // note you can optionally pass an object literal to extend too ;)
@@ -59,7 +59,7 @@ Environments
 ------------
 Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.1](http://wiki.commonjs.org/wiki/Modules/1.1) interface to allow two flavors of development. See the implementations below:
 
-browser environment
+<h3>browser environment</h3>
 
     <script src="path/to/klass.js"></script>
     <!-- klass() is exposed to context -->
@@ -70,7 +70,7 @@ browser environment
       Bar.implement({ ... });
     </script>
 
-as a module
+<h3>as a module</h3>
 
     // your-application.js
     var klass = require('path/to/klass');
@@ -85,7 +85,7 @@ If you want to see shiny passing tests, run the _tests_ make command
 
 Install the Package!
 --------------------
-By far the easiest way to get started with klass is to simply install the package and hit the ground running!
+By far the easiest way to get started with klass is to simply install the package and hit the ground running!!
 
     % npm install klass
 
@@ -94,5 +94,6 @@ By far the easiest way to get started with klass is to simply install the packag
 
 Contributors
 ------------
-  * [Dustin Diaz](https://github.com/polvero)
-  * [Jacob Thornton](https://github.com/jacobthornton)
+  * [Dustin Diaz](https://github.com/polvero/klass/commits/master?author=polvero)
+  * [Jacob Thornton](https://github.com/polvero/klass/commits/master?author=jacobthornton)
+  * Follow our Software [@dedfat](http://twitter.com/dedfat)

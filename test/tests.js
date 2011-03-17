@@ -15,6 +15,23 @@ sink('klass', function (test, ok, before, after) {
     });
   });
 
+  test('should not call constructor twice', 2, function () {
+    var called = 0;
+    var thing = klass(function () {
+      ok(++called == 1, 'constructor called only once');
+      if (called == 2) {
+        clearTimeout(timer);
+      }
+    });
+
+    new thing();
+
+    var timer = setTimeout(function () {
+      ok(true, 'second constructor never called');
+    }, 200);
+
+  });
+
   test('should create a Base class', 1, function () {
     ok((new Base(5).n == 5), 'created Base class');
   });
@@ -87,12 +104,13 @@ sink('klass', function (test, ok, before, after) {
       }
     });
 
-    var Sub = Base.extend({
-        thing: function () {
-          this.supr();
-          ok((++thingCalled == 1), 'calls middleware only once');
-        }
-      });
+    var Sub = Base.extend().methods({
+      thing: function () {
+        console.log('middleware thing()');
+        this.supr();
+        ok((++thingCalled == 1), 'calls middleware only once');
+      }
+    });
 
     var inst = new Sub('hello');
 
@@ -100,16 +118,55 @@ sink('klass', function (test, ok, before, after) {
 
     inst.implement({
       thing: function (n) {
-        this.supr();
+        console.log('thing()');
         ok(true, 'called implementer');
+        this.supr();
         this.booooshr();
       },
       booooshr: function () {
+        console.log('booshr()');
         ok(true, 'called booshr');
       }
     }).thing();
 
   });
+
+
+  // test('same thing but extend taking object literal', 5, function () {
+  //   var thingCalled = 0;
+  //   Base.methods({
+  //     thing: function () {;
+  //       console.log('base thing()');
+  //       ok(true, 'Base thing() gets called');
+  //     }
+  //   });
+  //
+  //   var Sub = Base.extend({
+  //     thing: function () {
+  //       console.log('middleware thing()');
+  //       this.supr();
+  //       ok((++thingCalled == 1), 'calls middleware only once');
+  //     }
+  //   });
+  //
+  //   var inst = new Sub('hello');
+  //
+  //   inst.thing();
+  //
+  //   inst.implement({
+  //     thing: function (n) {
+  //       console.log('thing()');
+  //       ok(true, 'called implementer');
+  //       this.supr();
+  //       this.booooshr();
+  //     },
+  //     booooshr: function () {
+  //       console.log('booshr()');
+  //       ok(true, 'called booshr');
+  //     }
+  //   }).thing();
+  //
+  // });
 
   test('should be able to set statics', 1, function () {
     Base.statics({
@@ -152,6 +209,46 @@ sink('klass', function (test, ok, before, after) {
     ok(new Sub().second() == 'second', 'b is instance of Base');
 
   });
+
+  test('base constructor not called twice when no constructor used in sub', 2, function () {
+    var called = 0;
+    var Base = klass(function () {
+      ok(++called == 1, 'called only once');
+      if (called > 1) {
+        clearTimeout(timer);
+      }
+    });
+
+    var Sub = Base.extend();
+
+    new Sub();
+    var timer = setTimeout(function () {
+      ok(true, 'didnt call base twice');
+    }, 50);
+  });
+
+  test('base constructor not called twice when object used in sub', 2, function () {
+    var called = 0;
+    var Base = klass(function () {
+      ok(++called == 1, 'called only once');
+      if (called > 1) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    });
+
+    var timer = setTimeout(function () {
+      ok(true, 'didnt call base twice');
+    }, 100);
+
+
+    var Sub = Base.extend({
+      thing: function () { },
+    });
+
+    new Sub();
+  });
+
 
 });
 start();
