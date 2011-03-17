@@ -6,76 +6,64 @@
   */
 !function(context){
   var fnTest = /xyz/.test(function (){xyz;}) ? /\bsupr\b/ : /.*/,
-      noop = function(){}, proto = 'prototype',
+      noop = function(){},
+      proto = 'prototype',
       isFn = function (o) {
         return typeof o === 'function';
       };
 
-  function klass(o){
-    var methods, _constructor = isFn(o) ? (methods = {}, o) : (methods = o, noop);
-    return extend.call(_constructor, o, 1);
-  };
+  function klass(o) {
+    return extend.call(typeof o == 'function' ? o : noop, o, 1);
+  }
+
+  function process(what, o, supr){
+    for (var k in o) {
+      if (o.hasOwnProperty(k)) {
+        what[k] = typeof o[k] == "function"
+          && typeof supr[proto][k] == "function"
+          && fnTest.test(o[k])
+          ? wrap(k, o[k], supr) : o[k];
+      }
+    }
+  }
+
+  function wrap(k, fn, supr) {
+    return function () {
+      var tmp = this.supr;
+      this.supr = supr[proto][k];
+      var ret = fn.apply(this, arguments);
+      this.supr = tmp;
+      return ret;
+    };
+  }
 
   function extend(o, fromSub) {
-    o = o || noop;
     var supr = this,
-        _methods,
-        _constructor = isFn(o) ? (_methods = {}, o) : (_methods = o, this),
+        prototype = new noop(),
+        isFunction = typeof o == 'function',
+        _constructor = isFunction ? o : this,
+        _methods = isFunction ? {} : o,
         fn = function () {
           fromSub || isFn(o) && supr.apply(this, arguments);
           _constructor.apply(this, arguments);
-        },
-        prototype = new noop();
+        };
 
-    fn.methods = function (prop) {
-      for (var name in prop) {
-        prototype[name] = isFn(prop[name]) &&
-          isFn(supr[proto][name]) && fnTest.test(prop[name]) ?
-          (function(name, fn){
-            return function() {
-              this.supr = supr[proto][name];
-              return fn.apply(this, arguments);
-            };
-          })(name, prop[name]) :
-          prop[name];
-      }
-
+    fn.methods = function (o) {
+      process(prototype, o, supr);
       fn[proto] = prototype;
       return this;
-    }
+    };
 
     fn.methods.call(fn, _methods).constructor = this;
     fn.extend = arguments.callee;
 
-    if (!fromSub) {
-      for (var key in supr.prototype) {
-        fn[proto][key] = supr.prototype[key];
-      }
-    }
-
-    fn.statics = function (o) {
-      for (var k in o) {
-        o.hasOwnProperty(k) && (this[k] = o[k]);
-      }
-      return this;
-    };
-
-    function implement(name, f) {
-      return function () {
-        f.apply(this, arguments);
-        return this;
-      };
-    }
-
-    fn[proto].implement = function (ob) {
-      for (var k in ob) {
-        this[k] = implement(k, ob[k]);
-      }
+    fn.prototype.implement = fn.statics = function (o) {
+      process(this, o, supr);
       return this;
     };
 
     return fn;
-  };
+  }
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = klass;
