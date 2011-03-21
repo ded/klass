@@ -1,20 +1,20 @@
-!function(context){
+!function(context, f) {
   var fnTest = /xyz/.test(function (){xyz;}) ? /\bsupr\b/ : /.*/,
       noop = function(){},
       proto = 'prototype',
       isFn = function (o) {
-        return typeof o === 'function';
+        return typeof o === f;
       };
 
   function klass(o) {
-    return extend.call(typeof o == 'function' ? o : noop, o, 1);
+    return extend.call(typeof o == f ? o : noop, o, 1);
   }
 
-  function process(what, o, supr){
+  function process(what, o, supr) {
     for (var k in o) {
       if (o.hasOwnProperty(k)) {
-        what[k] = typeof o[k] == "function"
-          && typeof supr[proto][k] == "function"
+        what[k] = typeof o[k] == f
+          && typeof supr[proto][k] == f
           && fnTest.test(o[k])
           ? wrap(k, o[k], supr) : o[k];
       }
@@ -34,7 +34,7 @@
   function extend(o, fromSub) {
     var supr = this,
         prototype = new noop(),
-        isFunction = typeof o == 'function',
+        isFunction = typeof o == f,
         _constructor = isFunction ? o : this,
         _methods = isFunction ? {} : o,
         fn = function () {
@@ -65,4 +65,4 @@
     context.klass = klass;
   }
 
-}(this);
+}(this, 'function');
