@@ -249,6 +249,23 @@ sink('klass', function (test, ok, before, after) {
     new Sub();
   });
 
+  test('should inherit super method', 1, function () {
+    var Base = klass(function() {});
+    Base.methods({
+      foo: function () {
+        ok(true, 'called super method');
+      }
+    });
+
+    var Sub = Base.extend(function() {});
+    var inst = new Sub;
+    try {
+      inst.foo();
+    } catch (ex) {
+      ok(false, 'called super method');
+    }
+  });
+
 
 });
 start();
