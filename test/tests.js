@@ -256,7 +256,6 @@ sink('klass', function (test, ok, before, after) {
         ok(true, 'called super method');
       }
     });
-
     var Sub = Base.extend(function() {});
     var inst = new Sub;
     try {
