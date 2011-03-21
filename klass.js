@@ -5,7 +5,8 @@
   * MIT License
   */
 !function(context){
-  var fnTest = /xyz/.test(function (){xyz;}) ? /\bsupr\b/ : /.*/,
+  var fnTest = /xyz/.test(function (){xyz;}) ? /\bsupr\b/ : /./,
+      // in theory /./ could be replaced by {test:function(){ return true;}}
       noop = function(){},
       proto = 'prototype',
       isFn = function (o) {
