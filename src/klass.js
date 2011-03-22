@@ -50,21 +50,14 @@
     };
 
     fn.methods.call(fn, _methods).constructor = this;
-
     fn.extend = arguments.callee;
-
     fn[proto].implement = fn.statics = function (o) {
       process(this, o, supr);
       return this;
     };
-    if (isFunction) {
-      for (var p in this.prototype) {
-        if (p.match(/supr|implement/)) {
-          continue
-        }
-        fn[proto][p] = this.prototype[p];
-      }
 
+    if (isFunction) {
+      process(fn[proto], this.prototype, supr);
     }
 
     return fn;
