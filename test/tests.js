@@ -265,6 +265,26 @@ sink('klass', function (test, ok, before, after) {
     }
   });
 
+  test('can use strings as names for ... bla', 2, function () {
+    var Thing = klass().statics('foo', 5).methods({
+      getFoo: function () {
+        return this.constructor.foo
+      }
+    });
+    var inst = new Thing;
+    ok(inst.constructor.foo == 5, 'constructor.foo is defined');
+    ok(inst.getFoo() == 5, 'inst.getFoo() is defined');
+  });
+
+  test('can access constructor from within constructor', 1, function () {
+    var Base = klass(function () {
+      ok(this.constructor.foo == 'boosh', 'accessed this.constructor.foo');
+    })
+      .statics('foo', 'boosh');
+
+    new Base;
+
+  });
 
 });
 start();

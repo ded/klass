@@ -56,9 +56,14 @@
       return this;
     };
 
-    fn.methods.call(fn, _methods).constructor = this;
+    fn.methods.call(fn, _methods).prototype.constructor = fn;
     fn.extend = arguments.callee;
-    fn[proto].implement = fn.statics = function (o) {
+    fn[proto].implement = fn.statics = function (o, optFn) {
+      o = typeof o == 'string' ? (function () {
+        var obj = {};
+        obj[o] = optFn;
+        return obj;
+      }()) : o;
       process(this, o, supr);
       return this;
     };
