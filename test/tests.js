@@ -286,5 +286,16 @@ sink('klass', function (test, ok, before, after) {
 
   });
 
+  test('can access statics from statics', 1, function () {
+    var Base = klass().statics({
+      baz: function () {
+        return this.thunk;
+      },
+      thunk: 'awwwshiii'
+    });
+
+    ok(Base.baz() == 'awwwshiii', 'accessed thunk() from baz()');
+  });
+
 });
 start();
