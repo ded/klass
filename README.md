@@ -94,6 +94,6 @@ By far the easiest way to get started with klass is to simply install the packag
 
 Contributors
 ------------
-  * [Dustin Diaz](https://github.com/polvero/klass/commits/master?author=polvero)
-  * [Jacob Thornton](https://github.com/polvero/klass/commits/master?author=jacobthornton)
+  * [Dustin Diaz](https://github.com/ded/klass/commits/master?author=ded)
+  * [Jacob Thornton](https://github.com/ded/klass/commits/master?author=jacobthornton)
   * Follow our Software [@dedfat](http://twitter.com/dedfat)
