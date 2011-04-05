@@ -45,8 +45,10 @@ Interface
       }
     });
 
+    var Spazoid = new Alien('Zoopo');
+
     if (beamIsDown) {
-      Alien.implement({
+      Spazoid.implement({
         beam: function() {
           this.supr();
           // fallback to jets
