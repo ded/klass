@@ -35,6 +35,7 @@ Interface
     new SuperHuman('Zelda').walk()
 
 <h3>Object Literals...</h3>
+
 because sometimes you want to use little curlies ;)
 
     var Foo = klass({
@@ -54,7 +55,8 @@ because sometimes you want to use little curlies ;)
 *note: initialize will be called on class invocation*
 
 <h3>Implementing...</h3>
-(because sometimes you want to overwrite OR mixin an instance method)
+
+because sometimes you want to overwrite OR mixin an instance method
 
     // note you can optionally pass an object literal to extend too ;)
     var Alien = SuperHuman.extend({
