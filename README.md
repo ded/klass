@@ -34,6 +34,30 @@ Interface
 
     new SuperHuman('Zelda').walk()
 
+<h3>Object Literals...</h3>
+(because sometimes you want to use little curlies ;)
+
+    var Foo = klass({
+
+      foo: 0,
+
+      initialize: function() {
+        this.foo = 1;
+      },
+
+      getFoo: function () {
+        return this.foo;
+      },
+
+      setFoo: function (x) {
+        this.foo = x;
+        return this.getFoo();
+      }
+
+    });
+
+*note: initialize will be called on class invocation*
+
 <h3>Implementing...</h3>
 (because sometimes you want to overwrite OR mixin an instance method)
 

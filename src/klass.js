@@ -12,7 +12,6 @@
     return extend.call(typeof o == f ? o : noop, o, 1);
   }
 
-
   function wrap(k, fn, supr) {
     return function () {
       var tmp = this.supr;
@@ -35,6 +34,7 @@
   }
 
   function extend(o, fromSub) {
+    noop[proto] = this[proto];
     var supr = this,
         prototype = new noop(),
         isFunction = typeof o == f,
@@ -43,6 +43,9 @@
         fn = function () {
           fromSub || isFn(o) && supr.apply(this, arguments);
           _constructor.apply(this, arguments);
+          if (this.initialize) {
+            this.initialize.apply(this, arguments);
+          }
         };
 
     fn.methods = function (o) {
@@ -52,6 +55,7 @@
     };
 
     fn.methods.call(fn, _methods).prototype.constructor = fn;
+
     fn.extend = arguments.callee;
     fn[proto].implement = fn.statics = function (o, optFn) {
       o = typeof o == 'string' ? (function () {
@@ -62,10 +66,6 @@
       process(this, o, supr);
       return this;
     };
-
-    if (isFunction) {
-      process(fn[proto], this.prototype, supr);
-    }
 
     return fn;
   }

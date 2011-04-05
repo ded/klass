@@ -7,7 +7,6 @@ if (typeof module !== 'undefined' && module.exports) {
 
 sink('klass', function (test, ok, before, after) {
 
-
   var Base;
   before(function () {
     Base = klass(function (n) {
@@ -295,6 +294,61 @@ sink('klass', function (test, ok, before, after) {
     });
 
     ok(Base.baz() == 'awwwshiii', 'accessed thunk() from baz()');
+  });
+
+  test('Object Literal Syntax', 6, function () {
+
+    var Foo = klass({
+
+      foo: 0,
+      bar: 2,
+      baz: 3,
+
+      initialize: function() {
+        this.foo = 1;
+      },
+
+      getFoo: function () {
+        return this.foo;
+      },
+
+      setFoo: function (x) {
+        this.foo = x;
+        return this.getFoo();
+      }
+
+    });
+
+    var Bar = Foo.extend({
+
+      initialize: function () {
+        this.foo = 2;
+      },
+
+      setFoo: function (x) {
+        this.foo = x * 2;
+        return this.getFoo();
+      }
+
+    });
+
+    var first = new Foo(); //normal class
+    var second = new Bar(); //sub class
+    var third = new Bar() //mixin
+      .implement({
+        setFoo: function (x) {
+          this.foo = x * 3;
+          return this.getFoo();
+        }
+      });
+
+    ok(first.getFoo() == 1, 'should have called initialize method');
+    ok(first.setFoo(5) == 5, 'should set instance variables');
+    ok(second.getFoo() == 2, 'should have overridden initialize method');
+    ok(second.setFoo(5) == 10, 'should be 10');
+    ok(third.getFoo() == 2, 'should be 1');
+    ok(third.setFoo(10) == 30, 'should be 10');
+
   });
 
 });
