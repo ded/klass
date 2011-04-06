@@ -2,21 +2,28 @@ if (typeof module !== 'undefined' && module.exports) {
   var sink = require('../build/sink'),
       start = sink.start,
       sink = sink.sink;
-  var klass = require('../src/klass');
+  var $k = require('../src/klass');
+}
+else {
+  sink('no conflict', function (test, ok) {
+    test('should return old klass back to context', 1, function () {
+      ok(klass() == 'success', 'old klass called');
+    });
+  });
 }
 
 sink('klass', function (test, ok, before, after) {
 
   var Base;
   before(function () {
-    Base = klass(function (n) {
+    Base = $k(function (n) {
       this.n = n;
     });
   });
 
   test('should not call constructor twice', 2, function () {
     var called = 0;
-    var thing = klass(function () {
+    var thing = $k(function () {
       ok(++called == 1, 'constructor called only once');
       if (called == 2) {
         clearTimeout(timer);
@@ -36,7 +43,7 @@ sink('klass', function (test, ok, before, after) {
   });
 
   test('should allow optional hash as constructor for methods', 1, function () {
-    var objectKlass = klass({
+    var objectKlass = $k({
       get: function () {
         return this.foo;
       },
@@ -211,7 +218,7 @@ sink('klass', function (test, ok, before, after) {
 
   test('base constructor not called twice when no constructor used in sub', 2, function () {
     var called = 0;
-    var Base = klass(function () {
+    var Base = $k(function () {
       ok(++called == 1, 'called only once');
       if (called > 1) {
         clearTimeout(timer);
@@ -228,7 +235,7 @@ sink('klass', function (test, ok, before, after) {
 
   test('base constructor not called twice when object used in sub', 2, function () {
     var called = 0;
-    var Base = klass(function () {
+    var Base = $k(function () {
       ok(++called == 1, 'called only once');
       if (called > 1) {
         clearTimeout(timer);
@@ -249,7 +256,7 @@ sink('klass', function (test, ok, before, after) {
   });
 
   test('should inherit super method', 1, function () {
-    var Base = klass(function() {});
+    var Base = $k(function() {});
     Base.methods({
       foo: function () {
         ok(true, 'called super method');
@@ -265,7 +272,7 @@ sink('klass', function (test, ok, before, after) {
   });
 
   test('can use strings as names for ... bla', 2, function () {
-    var Thing = klass().statics('foo', 5).methods({
+    var Thing = $k().statics('foo', 5).methods({
       getFoo: function () {
         return this.constructor.foo
       }
@@ -276,7 +283,7 @@ sink('klass', function (test, ok, before, after) {
   });
 
   test('can access constructor from within constructor', 1, function () {
-    var Base = klass(function () {
+    var Base = $k(function () {
       ok(this.constructor.foo == 'boosh', 'accessed this.constructor.foo');
     })
       .statics('foo', 'boosh');
@@ -286,7 +293,7 @@ sink('klass', function (test, ok, before, after) {
   });
 
   test('can access statics from statics', 1, function () {
-    var Base = klass().statics({
+    var Base = $k().statics({
       baz: function () {
         return this.thunk;
       },
@@ -298,7 +305,7 @@ sink('klass', function (test, ok, before, after) {
 
   test('Object Literal Syntax', 6, function () {
 
-    var Foo = klass({
+    var Foo = $k({
 
       foo: 0,
       bar: 2,

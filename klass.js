@@ -80,9 +80,9 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = klass;
   } else {
-    var old = klass;
+    var old = context.klass;
     klass.noConflict = function () {
-      context.klass = klass;
+      context.klass = old;
       return this;
     };
     context.klass = klass;
