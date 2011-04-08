@@ -9,7 +9,8 @@
     "url": "http://github.com/polvero/klass.git"
   },
   "author": "Dustin Diaz / Jacob Thornton (http://twitter.com/dedfat)",
-  "main": "klass.js",
+  "main": "./klass.js",
+  "ender": "./src/ender.js",
   "engines": {
     "node": ">= 0.0.1"
   }
