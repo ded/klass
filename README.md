@@ -34,8 +34,29 @@ Interface
 
     new SuperHuman('Zelda').walk()
 
+<h3>Object Literals...</h3>
+
+because sometimes you want to use little curlies ;)
+
+    var Foo = klass({
+      foo: 0,
+      initialize: function() {
+        this.foo = 1;
+      },
+      getFoo: function () {
+        return this.foo;
+      },
+      setFoo: function (x) {
+        this.foo = x;
+        return this.getFoo();
+      }
+    });
+
+*note: initialize will be called on class invocation*
+
 <h3>Implementing...</h3>
-(because sometimes you want to overwrite OR mixin an instance method)
+
+because sometimes you want to overwrite OR mixin an instance method
 
     // note you can optionally pass an object literal to extend too ;)
     var Alien = SuperHuman.extend({
@@ -45,8 +66,10 @@ Interface
       }
     });
 
+    var Spazoid = new Alien('Zoopo');
+
     if (beamIsDown) {
-      Alien.implement({
+      Spazoid.implement({
         beam: function() {
           this.supr();
           // fallback to jets

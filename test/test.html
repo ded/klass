@@ -5,7 +5,15 @@
     <title>klass tests</title>
     <link rel="stylesheet" href="../build/sink/src/sink.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <script src="../build/sink/src/sink.js"></script>
+    <script>
+      var klass = function () {
+        return 'success';
+      }
+    </script>
     <script src="../src/klass.js"></script>
+    <script>
+      $k = klass.noConflict();
+    </script>
   </head>
   <body>
     <h1>Klass tests</h1>
