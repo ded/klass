@@ -1,0 +1,3 @@
+$.augment({
+  klass: klass.noConflict()
+});
