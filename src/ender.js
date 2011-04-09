@@ -1,3 +1,3 @@
-$.augment({
+$.ender({
   klass: klass.noConflict()
 });
