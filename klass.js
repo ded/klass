@@ -48,10 +48,11 @@
         _constructor = isFunction ? o : this,
         _methods = isFunction ? {} : o,
         fn = function () {
-          fromSub || isFn(o) && supr.apply(this, arguments);
-          _constructor.apply(this, arguments);
           if (this.initialize) {
             this.initialize.apply(this, arguments);
+          } else {
+            fromSub || isFn(o) && supr.apply(this, arguments);
+            _constructor.apply(this, arguments);
           }
         };
 

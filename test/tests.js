@@ -358,5 +358,28 @@ sink('klass', function (test, ok, before, after) {
 
   });
 
+  test('object literal with initialize shouldn\'t bubble constructor', 1, function () {
+    var Foo = $k({
+        initialize: function() {
+          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+        }
+    });
+
+    var Bar = Foo.extend({
+        initialize: function() {
+          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+        }
+    });
+
+    var Baz = Bar.extend({
+        initialize: function() {
+          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+        }
+    });
+
+    //should only fire Baz's init
+    var baz = new Baz();
+  })
+
 });
 start();
