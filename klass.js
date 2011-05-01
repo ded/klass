@@ -7,7 +7,7 @@
   */
 !function (exports) {
   // Convenience aliases.
-  var toString = {}.toString,
+  var toString = {}.toString, slice = [].slice,
 
   // Capture the original value of the `klass` variable; used in `klass.noConflict`.
   original = exports.klass,
@@ -81,12 +81,7 @@
           }
         };
     }
-  })(),
-
-  // Test if the current environment supports function decompilation.
-  supercall = /xyz/.test(function () {
-    xyz;
-  }) ? /\bsupr\b/ : /.*/;
+  })();
 
   // A helper function for creating prototype chains.
   function Subclass() {}
@@ -96,21 +91,13 @@
     return extend.call(toString.call(options) == '[object Function]' ? options : Subclass, options, true);
   }
 
-  // Wraps a subclass method to provide access to its superclass method.
-  function wrap(property, method, superclass) {
-    return function () {
-      var original = this.supr;
-      this.supr = superclass.prototype[property];
-      var result = method.apply(this, arguments);
-      this.supr = original;
-      return result;
-    };
-  }
-
-  // Extends a class with class methods, wrapping all subclass methods.
+  // Extends a class with class methods.
   function process(prototype, methods, superclass) {
     forEach(methods, function(method, property) {
-      prototype[property] = toString.call(method) == '[object Function]' && toString.call(superclass.prototype[property]) == '[object Function]' && supercall.test(method) ? wrap(property, method, superclass) : method;
+      var supr = superclass.prototype[property];
+      // Subclass method; set its `supr` property to the corresponding superclass method.
+      if (toString.call(method) == '[object Function]' && supr && toString.call(supr) == '[object Function]') method.supr = supr;
+      prototype[property] = method;
     });
   }
 
@@ -146,6 +133,21 @@
       }
       process(this, properties, superclass);
       return this;
+    };
+
+    // A helper for invoking a superclass method. Credits: T.J. Crowder.
+    klass.prototype.callSuper = function(method) {
+      var supr, parameters;
+      if (typeof method.callee == 'function') {
+        // An `arguments` object was provided; extract the superclass method.
+        parameters = method;
+        method = method.callee;
+      } else {
+        parameters = arguments.length > 1 && slice.call(arguments, 1);
+      }
+      // Call the superclass method.
+      supr = method.supr;
+      return parameters ? supr.apply(this, parameters) : supr.call(this);
     };
 
     return klass;

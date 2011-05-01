@@ -85,7 +85,7 @@ sink('klass', function (test, ok, before, after) {
     })
       .methods({
         bah: function() {
-          this.supr();
+          arguments.callee.supr.call(this);
           ok(++methodTimes == 2, 'called Sub1 method second');
         }
       });
@@ -95,7 +95,7 @@ sink('klass', function (test, ok, before, after) {
     })
       .methods({
         bah: function () {
-          this.supr();
+          this.callSuper(arguments);
           ok(++methodTimes == 3, 'called Sub2 method third');
         }
       });
@@ -113,7 +113,7 @@ sink('klass', function (test, ok, before, after) {
     var Sub = Base.extend().methods({
       thing: function () {
         console.log('middleware thing()');
-        this.supr();
+        arguments.callee.supr.call(this);
         ok((++thingCalled == 1), 'calls middleware only once');
       }
     });
@@ -126,7 +126,7 @@ sink('klass', function (test, ok, before, after) {
       thing: function (n) {
         console.log('thing()');
         ok(true, 'called implementer');
-        this.supr();
+        this.callSuper(arguments);
         this.booooshr();
       },
       booooshr: function () {
@@ -136,7 +136,6 @@ sink('klass', function (test, ok, before, after) {
     }).thing();
 
   });
-
 
   test('same thing but extend taking object literal', 5, function () {
     var thingCalled = 0;
@@ -150,7 +149,7 @@ sink('klass', function (test, ok, before, after) {
     var Sub = Base.extend({
       thing: function () {
         console.log('middleware thing()');
-        this.supr();
+        arguments.callee.supr.call(this);
         ok((++thingCalled == 1), 'calls middleware only once');
       }
     });
@@ -163,7 +162,7 @@ sink('klass', function (test, ok, before, after) {
       thing: function (n) {
         console.log('thing()');
         ok(true, 'called implementer');
-        this.supr();
+        this.callSuper(arguments);
         this.booooshr();
       },
       booooshr: function () {
@@ -202,10 +201,10 @@ sink('klass', function (test, ok, before, after) {
     var Sub = Base.extend({
       first: function () {
         this.second();
-        return this.supr();
+        return arguments.callee.supr.call(this);
       },
       second: function(){
-        return this.supr();
+        return this.callSuper(arguments);
       }
     });
 
@@ -246,7 +245,6 @@ sink('klass', function (test, ok, before, after) {
     var timer = setTimeout(function () {
       ok(true, 'didnt call base twice');
     }, 100);
-
 
     var Sub = Base.extend({
       thing: function () { },
