@@ -96,7 +96,7 @@ Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.
 <h3>as a module</h3>
 
     // your-application.js
-    var klass = require('path/to/klass');
+    var klass = require('path/to/klass').klass;
 
     var Foo = klass(...);
 
@@ -113,7 +113,7 @@ By far the easiest way to get started with klass is to simply install the packag
     % npm install klass
 
     // in your Node application
-    var klass = require('klass')
+    var klass = require('klass').klass;
 
 Contributors
 ------------

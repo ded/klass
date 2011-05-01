@@ -1,85 +1,86 @@
-!function (context, f) {
-  var fnTest = /xyz/.test(function () {
-    xyz;
-    }) ? /\bsupr\b/ : /.*/,
-      noop = function (){},
-      proto = 'prototype',
-      isFn = function (o) {
-        return typeof o === f;
-      };
+!function (exports) {
+  // Convenience aliases.
+  var toString = {}.toString, hasOwnProperty = {}.hasOwnProperty,
 
-  function klass(o) {
-    return extend.call(typeof o == f ? o : noop, o, 1);
+  // Capture the original value of the `klass` variable; used in `klass.noConflict`.
+  original = exports.klass,
+
+  // Test if the current environment supports function decompilation.
+  supercall = /xyz/.test(function () {
+    xyz;
+  }) ? /\bsupr\b/ : /.*/;
+
+  // A helper function for creating prototype chains.
+  function Subclass() {}
+
+  // The `klass` function; creates a new class.
+  function klass(options) {
+    return extend.call(toString.call(options) == '[object Function]' ? options : Subclass, options, true);
   }
 
-  function wrap(k, fn, supr) {
+  // Wraps a subclass method to provide access to its superclass method.
+  function wrap(property, method, superclass) {
     return function () {
-      var tmp = this.supr;
-      this.supr = supr[proto][k];
-      var ret = fn.apply(this, arguments);
-      this.supr = tmp;
-      return ret;
+      var original = this.supr;
+      this.supr = superclass.prototype[property];
+      var result = method.apply(this, arguments);
+      this.supr = original;
+      return result;
     };
   }
 
-  function process(what, o, supr) {
-    for (var k in o) {
-      if (o.hasOwnProperty(k)) {
-        what[k] = typeof o[k] == f
-          && typeof supr[proto][k] == f
-          && fnTest.test(o[k])
-          ? wrap(k, o[k], supr) : o[k];
+  // Extends a class with class methods, wrapping all subclass methods.
+  function process(prototype, methods, superclass) {
+    for (var property in methods) {
+      if (hasOwnProperty.call(methods, property)) {
+        var method = methods[property];
+        prototype[property] = toString.call(method) == '[object Function]' && toString.call(superclass.prototype[property]) == '[object Function]' && supercall.test(method) ? wrap(property, method, superclass) : method;
       }
     }
   }
 
-  function extend(o, fromSub) {
-    noop[proto] = this[proto];
-    var supr = this,
-        prototype = new noop(),
-        isFunction = typeof o == f,
-        _constructor = isFunction ? o : this,
-        _methods = isFunction ? {} : o,
-        fn = function () {
-          if (this.initialize) {
-            this.initialize.apply(this, arguments);
-          } else {
-            fromSub || isFn(o) && supr.apply(this, arguments);
-            _constructor.apply(this, arguments);
-          }
-        };
+  // Creates a new base class or subclass.
+  function extend(properties, isSubclass) {
+    Subclass.prototype = this.prototype;
+    var superclass = this, subclass = new Subclass, isFunction = toString.call(properties) == '[object Function]',
+    constructor = isFunction ? properties : this, methods = isFunction ? {} : properties;
 
-    fn.methods = function (o) {
-      process(prototype, o, supr);
-      fn[proto] = prototype;
+    function klass() {
+      if (this.initialize) {
+        this.initialize.apply(this, arguments);
+      } else {
+        isSubclass || isFunction && superclass.apply(this, arguments);
+        constructor.apply(this, arguments);
+      }
+    }
+
+    klass.methods = function (methods) {
+      process(subclass, methods, superclass);
+      klass.prototype = subclass;
       return this;
     };
 
-    fn.methods.call(fn, _methods).prototype.constructor = fn;
+    klass.methods.call(klass, methods).prototype.constructor = klass;
 
-    fn.extend = arguments.callee;
-    fn[proto].implement = fn.statics = function (o, optFn) {
-      o = typeof o == 'string' ? (function () {
-        var obj = {};
-        obj[o] = optFn;
-        return obj;
-      }()) : o;
-      process(this, o, supr);
+    klass.extend = extend;
+    klass.prototype.implement = klass.statics = function (properties, method) {
+      if (typeof properties == 'string') {
+        var object = {};
+        object[properties] = method;
+        properties = object;
+      }
+      process(this, properties, superclass);
       return this;
     };
 
-    return fn;
+    return klass;
   }
 
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = klass;
-  } else {
-    var old = context.klass;
-    klass.noConflict = function () {
-      context.klass = old;
-      return this;
-    };
-    context.klass = klass;
-  }
+  // Restores the original value of the `klass` variable.
+  klass.noConflict = function() {
+    exports.klass = original;
+    return klass;
+  };
 
-}(this, 'function');
+  exports.klass = klass;
+}(typeof exports == 'object' && exports || this);

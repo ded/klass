@@ -1,8 +1,8 @@
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module === 'object' && typeof exports === 'object') {
   var sink = require('../build/sink'),
       start = sink.start,
       sink = sink.sink;
-  var $k = require('../src/klass');
+  var $k = require('../src/klass').klass;
 }
 else {
   sink('no conflict', function (test, ok) {
