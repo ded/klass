@@ -1,17 +1,15 @@
 !function (exports) {
   // Convenience aliases.
-  var toString = {}.toString, slice = [].slice,
+  var getClass = {}.toString, slice = [].slice,
 
-  // Capture the original value of the `klass` variable; used in `klass.noConflict`.
+  // Capture the original value of the `klass` variable; used in
+  // `klass.noConflict`.
   original = exports.klass,
 
   // A cross-environment method for iterating over objects.
   forEach = (function () {
-    // Convenience aliases.
-    var hasOwnProperty = {}.hasOwnProperty, properties, property, length;
-
     // Provide a workaround for `Object#hasOwnProperty` for Safari 2.
-    if (typeof hasOwnProperty != 'function') hasOwnProperty = function (property) {
+    var hasOwnProperty = {}.hasOwnProperty || function (property) {
       // Capture the original prototype chain.
       var original = this.__proto__, result;
       // Break the prototype chain.
@@ -20,56 +18,68 @@
       // Restore the prototype chain.
       this.__proto__ = original;
       return result;
-    };
+    }, properties, property, length;
 
-    // The `Properties` constructor is used to test for bugs in the current environment's
-    // `for...in` algorithm. Credits: John-David Dalton.
+    // Test for bugs in the `for...in` iteration algorithm.
     function Properties() {
       this.toString = 1;
     }
     Properties.prototype.toString = 1;
-
-    // Create and iterate over a new instance of the `Properties` constructor.
+    // Iterate over a new instance of the `Properties` constructor.
     properties = new Properties;
     for (property in properties) {
-      if (hasOwnProperty.call(properties, property)) length++;
+      // Ignore inherited properties to correctly detect iteration bugs.
+      if (hasOwnProperty.call(properties, property)) {
+        length++;
+      }
     }
 
     switch (length) {
       // JScript ignores shadowed non-enumerable properties.
       case 0:
         // Provide a workaround for the JScript bug.
-        properties = ['constructor', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'toLocaleString', 'toString', 'valueOf'];
-        return function (object, iterator, context) {
-          var property, index;
-          if (typeof object == 'object' && object != null) {
-            for (property in object) {
-              if (hasOwnProperty.call(object, property)) iterator.call(context, object[property], property);
+        properties = ['constructor', 'hasOwnProperty', 'isPrototypeOf',
+          'propertyIsEnumerable', 'toLocaleString', 'toString', 'valueOf'];
+        return function (value, iterator, context) {
+          var isFunction = getClass.call(value) == '[object Function]',
+          length = properties.length, key;
+          for (key in value) {
+            // The `prototype` property of functions is handled inconsistently.
+            if (!(isFunction && key == 'prototype') && hasOwnProperty.call(
+            value, key) && iterator.call(context, value[key], key) === false) {
+              break;
             }
-            // Provide a workaround for the JScript bug.
-            index = -1;
-            while ((property = properties[++index])) {
-              if (hasOwnProperty.call(object, property)) iterator.call(context, object[property], property);
+          }
+          // Provide a workaround for the JScript bug.
+          while (length--) {
+            key = properties[length];
+            if (hasOwnProperty.call(value, key) && iterator.call(context,
+            value[key], key) === false) {
+              break;
             }
           }
         };
       // Safari enumerates shadowed and inherited properties.
       case 1:
-        return function (object, iterator, context) {
-          var property, properties = {};
-          if (typeof object == 'object' && object != null) {
-            for (property in object) {
-              // Memoize the iterated properties to prevent enumeration of shadowed
-              // inherited properties.
-              if (!hasOwnProperty.call(properties, property) && (properties[property] = 1) && hasOwnProperty.call(object, property)) iterator.call(context, object[property], property);
+        return function (value, iterator, context) {
+          var isFunction = getClass.call(value) == '[object Function]',
+          keys = {}, key;
+          for (key in value) {
+            // Cache each property to prevent double enumeration of properties.
+            if (!(isFunction && key == 'prototype') && !hasOwnProperty.call(
+            keys, key) && (keys[key] = 1) && hasOwnProperty.call(value, key) &&
+            iterator.call(context, value[key], key) === false) {
+              break;
             }
           }
         };
       default:
-        return function (object, iterator, context) {
-          if (typeof object == 'object' && object != null) {
-            for (var property in object) {
-              if (hasOwnProperty.call(object, property)) iterator.call(context, object[property], property);
+        return function (value, iterator, context) {
+          var isFunction = getClass.call(value) == '[object Function]', key;
+          for (key in value) {
+            if (!(isFunction && key == 'prototype') && hasOwnProperty.call(value,
+            key) && iterator.call(context, value[key], key) === false) {
+              break;
             }
           }
         };
@@ -81,7 +91,8 @@
 
   // The `klass` function; creates a new class.
   function klass(options) {
-    return extend.call(toString.call(options) == '[object Function]' ? options : Subclass, options, true);
+    return extend.call(getClass.call(options) == '[object Function]' ? options :
+      Subclass, options, true);
   }
 
   // Extends a class with class methods.
@@ -89,7 +100,10 @@
     forEach(methods, function(method, property) {
       var supr = superclass.prototype[property];
       // Subclass method; set its `supr` property to the corresponding superclass method.
-      if (toString.call(method) == '[object Function]' && supr && toString.call(supr) == '[object Function]') method.supr = supr;
+      if (getClass.call(method) == '[object Function]' && supr &&
+      getClass.call(supr) == '[object Function]') {
+        method.supr = supr;
+      }
       prototype[property] = method;
     });
   }
@@ -97,8 +111,10 @@
   // Creates a new base class or subclass.
   function extend(properties, isSubclass) {
     Subclass.prototype = this.prototype;
-    var superclass = this, subclass = new Subclass, isFunction = toString.call(properties) == '[object Function]',
-    constructor = isFunction ? properties : this, methods = isFunction ? {} : properties;
+    var superclass = this, subclass = new Subclass,
+    isFunction = getClass.call(properties) == '[object Function]',
+    constructor = isFunction ? properties : this,
+    methods = isFunction ? {} : properties;
 
     function klass() {
       if (this.initialize) {
