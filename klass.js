@@ -16,7 +16,7 @@
       };
 
   function klass(o) {
-    return extend.call(typeof o == f ? o : noop, o, 1);
+    return extend.call(isFn(o) ? o : noop, o, 1);
   }
 
   function wrap(k, fn, supr) {
@@ -32,8 +32,8 @@
   function process(what, o, supr) {
     for (var k in o) {
       if (o.hasOwnProperty(k)) {
-        what[k] = typeof o[k] == f
-          && typeof supr[proto][k] == f
+        what[k] = isFn(o[k])
+          && isFn(supr[proto][k])
           && fnTest.test(o[k])
           ? wrap(k, o[k], supr) : o[k];
       }
@@ -41,17 +41,19 @@
   }
 
   function extend(o, fromSub) {
+    // must redefine noop each time so it doesn't inherit from previous arbitrary classes
+    function noop() {}
     noop[proto] = this[proto];
     var supr = this,
         prototype = new noop(),
-        isFunction = typeof o == f,
+        isFunction = isFn(o),
         _constructor = isFunction ? o : this,
         _methods = isFunction ? {} : o,
         fn = function () {
           if (this.initialize) {
             this.initialize.apply(this, arguments);
           } else {
-            fromSub || isFn(o) && supr.apply(this, arguments);
+            fromSub || isFunction && supr.apply(this, arguments);
             _constructor.apply(this, arguments);
           }
         };

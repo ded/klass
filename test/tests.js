@@ -360,25 +360,43 @@ sink('klass', function (test, ok, before, after) {
 
   test('object literal with initialize shouldn\'t bubble constructor', 1, function () {
     var Foo = $k({
-        initialize: function() {
-          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
-        }
+      initialize: function() {
+        ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+      }
     });
 
     var Bar = Foo.extend({
-        initialize: function() {
-          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
-        }
+      initialize: function() {
+        ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+      }
     });
 
     var Baz = Bar.extend({
-        initialize: function() {
-          ok(true, 'object literal with initialize shouldn\'t bubble constructor');
-        }
+      initialize: function() {
+        ok(true, 'object literal with initialize shouldn\'t bubble constructor');
+      }
     });
 
     //should only fire Baz's init
     var baz = new Baz();
+  })
+
+  test('do not call first klass after extend', 1, function () {
+    var MyTest1 = $k({
+      initialize: function() {
+        console.log('called?');
+        ok(false, 'should not call initalize');
+      }
+    });
+
+    MyTest1.extend({});
+
+    var MyTest2 = $k({})
+
+    var instance = new MyTest2();
+    setTimeout(function () {
+      ok(true, 'did not call random initalize')
+    }, 200);
   })
 
 });
