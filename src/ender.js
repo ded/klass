@@ -1,3 +1,3 @@
 $.ender({
-  klass: klass.noConflict()
+  klass: require('klass')
 });
