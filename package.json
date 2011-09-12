@@ -1,17 +1,21 @@
 {
-  "name": "klass",
-  "description": "Class provider with classical inheritance interface",
-  "version": "1.0.6",
-  "homepage": "http://dustindiaz.com/klass",
-  "authors": ["Dustin Diaz <@ded>", "Jacob Thornton <@fat>"],
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/ded/klass.git"
-  },
-  "main": "./klass.js",
-  "ender": "./src/ender.js",
-  "keywords": ["ender", "class", "prototype", "inheritance", "oop"],
-  "engines": {
-    "node": ">= 0.0.1"
+    "name": "klass"
+  , "description": "Class provider with classical inheritance interface"
+  , "version": "1.1.0"
+  , "homepage": "http://dustindiaz.com/klass"
+  , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
+  , "main": "./klass.js"
+  , "ender": "./src/ender.js"
+  , "keywords": ["ender", "class", "prototype", "inheritance", "oop"]
+  , "repository": {
+      "type": "git"
+    , "url": "http://github.com/ded/klass.git"
+  }
+  , "engines": {
+      "node": ">= 0.4.0"
+  }
+  , "devDependencies": {
+        "sink-test": ">= 0.0.8"
+      , "uglify-js": ">= 1.0.0"
   }
 }

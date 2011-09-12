@@ -1,3 +1,3 @@
-$.ender({
+ender.ender({
   klass: require('klass')
-});
+})

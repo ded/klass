@@ -1,45 +1,45 @@
 if (typeof module !== 'undefined' && module.exports) {
-  var sink = require('../build/sink'),
-      start = sink.start,
-      sink = sink.sink;
-  var $k = require('../src/klass');
+  var sink = require('sink-test')
+    , start = sink.start
+    , sink = sink.sink
+    , $k = require('../src/klass')
 }
 else {
   sink('no conflict', function (test, ok) {
     test('should return old klass back to context', 1, function () {
-      ok(klass() == 'success', 'old klass called');
-    });
-  });
+      ok(klass() == 'success', 'old klass called')
+    })
+  })
 }
 
 sink('klass', function (test, ok, before, after) {
 
-  var Base;
+  var Base
   before(function () {
     Base = $k(function (n) {
-      this.n = n;
+      this.n = n
     });
   });
 
   test('should not call constructor twice', 2, function () {
-    var called = 0;
-    var thing = $k(function () {
-      ok(++called == 1, 'constructor called only once');
+    var called = 0
+      , thing = $k(function () {
+      ok(++called == 1, 'constructor called only once')
       if (called == 2) {
         clearTimeout(timer);
       }
     });
 
-    new thing();
+    new thing()
 
     var timer = setTimeout(function () {
       ok(true, 'second constructor never called');
-    }, 200);
+    }, 200)
 
   });
 
   test('should create a Base class', 1, function () {
-    ok((new Base(5).n == 5), 'created Base class');
+    ok((new Base(5).n == 5), 'created Base class')
   });
 
   test('should allow optional hash as constructor for methods', 1, function () {

@@ -1,7 +1,6 @@
-/**
-  * Klass.js - copyright @dedfat
-  * version 1.0
+/*!
+  * klass: a classical JS OOP façade
   * https://github.com/ded/klass
-  * Follow our software http://twitter.com/dedfat :)
-  * MIT License
+  * (c) Dustin Diaz & Jacob Thornton
+  * License MIT
   */
