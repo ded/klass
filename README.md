@@ -50,7 +50,7 @@ var Foo = klass({
     return this.foo
   },
   setFoo: function (x) {
-    this.foo = x;
+    this.foo = x
     return this.getFoo()
   }
 })
@@ -69,7 +69,7 @@ var Alien = SuperHuman.extend({
     this.supr()
     // beam into space
   }
-});
+})
 
 var Spazoid = new Alien('Zoopo')
 
@@ -121,7 +121,7 @@ By far the easiest way to get started with klass is to simply install the packag
 
 Ender compatibility
 -------------
-add `klass` to your ender compliation
+add `klass` to your ender compilation
 
     $ ender add klass
 
