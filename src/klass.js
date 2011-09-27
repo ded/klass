@@ -6,15 +6,15 @@
   var context = this
     , old = context.klass
     , f = 'function'
-    , fnTest = /xyz/.test(function () {xyz;}) ? /\bsupr\b/ : /.*/
-    , noop = function () {}
+    , fnTest = /xyz/.test(function () {xyz}) ? /\bsupr\b/ : /.*/
     , proto = 'prototype'
-    , isFn = function (o) {
-        return typeof o === f
-      }
 
   function klass(o) {
-    return extend.call(isFn(o) ? o : noop, o, 1)
+    return extend.call(isFn(o) ? o : function () {}, o, 1)
+  }
+
+  function isFn(o) {
+    return typeof o === f
   }
 
   function wrap(k, fn, supr) {
@@ -47,14 +47,13 @@
       , isFunction = isFn(o)
       , _constructor = isFunction ? o : this
       , _methods = isFunction ? {} : o
-      , fn = function () {
-          if (this.initialize) {
-            this.initialize.apply(this, arguments)
-          } else {
-            fromSub || isFunction && supr.apply(this, arguments)
-            _constructor.apply(this, arguments)
-          }
-        }
+    function fn() {
+      if (this.initialize) this.initialize.apply(this, arguments)
+      else {
+        fromSub || isFunction && supr.apply(this, arguments)
+        _constructor.apply(this, arguments)
+      }
+    }
 
     fn.methods = function (o) {
       process(prototype, o, supr)

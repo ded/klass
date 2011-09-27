@@ -1,10 +1,10 @@
 {
     "name": "klass"
   , "description": "Class provider with classical inheritance interface"
-  , "version": "1.2.0"
+  , "version": "1.2.1"
   , "homepage": "http://dustindiaz.com/klass"
   , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
-  , "contributors": ["Jacob Thornton <> (https://github.com/fat)"]
+  , "contributors": ["Jacob Thornton <jacob@twitter.com> (https://github.com/fat)"]
   , "main": "./klass.js"
   , "ender": "./src/ender.js"
   , "keywords": ["ender", "class", "prototype", "inheritance", "oop"]
