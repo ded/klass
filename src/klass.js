@@ -84,4 +84,4 @@
   context.klass = klass
 
   return klass
-})
+});
