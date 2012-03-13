@@ -398,6 +398,34 @@ sink('klass', function (test, ok, before, after) {
       ok(true, 'did not call random initalize')
     }, 200);
   })
+  
+  test("should reset super attribute if exception is thrown", 1, function() {
+    var successFullyCalledCatcher = false
+    var Base = $k({
+      thrower: function() {
+        throw new Exception()
+      },
+      catcher: function() {
+        successFullyCalledCatcher = true
+      }
+    })
+    var Sub = Base.extend({
+      thrower: function() {
+        this.supr()
+      },
+      catcher: function() {
+        try {
+          this.thrower()
+        } finally {
+          this.supr()
+        }
+      }
+    })
+    
+    var classUnderTest = new Sub()
+    try { classUnderTest.catcher() } catch (ignored){}
+    ok(successFullyCalledCatcher, "Got confused as to what super method to call")
+  })
 
 });
 start();
