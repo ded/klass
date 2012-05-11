@@ -6,10 +6,10 @@
 
 !function (name, definition) {
   if (typeof define == 'function') define(definition)
-  else if (typeof module != 'undefined') module.exports = definition()
+  else if (typeof module != 'undefined') module.exports = definition({})
   else this[name] = definition()
-}('klass', function () {
-  var context = this
+}('klass', function (context) {
+  var context = context || this
     , old = context.klass
     , f = 'function'
     , fnTest = /xyz/.test(function () {xyz}) ? /\bsupr\b/ : /.*/
