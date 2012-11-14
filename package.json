@@ -1,7 +1,7 @@
 {
     "name": "klass"
   , "description": "Class provider with classical inheritance interface"
-  , "version": "1.2.2"
+  , "version": "1.2.3"
   , "homepage": "http://dustindiaz.com/klass"
   , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
   , "contributors": ["Jacob Thornton <jacob@twitter.com> (https://github.com/fat)"]
