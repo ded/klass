@@ -21,8 +21,13 @@
     return function () {
       var tmp = this.supr
       this.supr = supr[proto][k]
-      var ret = fn.apply(this, arguments)
-      this.supr = tmp
+      var undefined = {}.fabricatedUndefined
+      var ret = undefined
+      try {
+        ret = fn.apply(this, arguments)
+      } finally {
+        this.supr = tmp
+      }
       return ret
     }
   }
