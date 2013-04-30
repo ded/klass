@@ -1,5 +1,5 @@
 .PHONY: boosh test
 boosh:
-	smoosh make make/build.json
+	./node_modules/smoosh/bin/smoosh make make/build.json
 test:
 	node test/tests.js

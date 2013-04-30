@@ -4,11 +4,11 @@
   * License MIT (c) Dustin Diaz & Jacob Thornton 2012
   */
 
-!function (name, definition) {
+!function (name, context, definition) {
   if (typeof define == 'function') define(definition)
   else if (typeof module != 'undefined') module.exports = definition()
-  else this[name] = definition()
-}('klass', function () {
+  else context[name] = definition()
+}('klass', this, function () {
   var context = this
     , old = context.klass
     , f = 'function'
@@ -92,7 +92,6 @@
     context.klass = old
     return this
   }
-  context.klass = klass
 
   return klass
 });
