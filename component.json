@@ -1,0 +1,18 @@
+{
+  "name": "klass",
+  "repo": "ded/klass",
+  "description": "An expressive, cross platform JavaScript Class provider with a classical interface to prototypal inheritance.",
+  "version": "1.3.0",
+  "dependencies": {
+  },
+  "keywords": [
+    "ender",
+    "class",
+    "prototype",
+    "inheritance",
+    "oop"
+  ],
+  "main": "klass.js",
+  "scripts": [
+  ]
+}
