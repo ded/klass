@@ -1,22 +1,30 @@
 {
-    "name": "klass"
-  , "description": "Class provider with classical inheritance interface"
-  , "version": "1.3.0"
-  , "homepage": "http://dustindiaz.com/klass"
-  , "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)"
-  , "contributors": ["Jacob Thornton <jacob@twitter.com> (https://github.com/fat)"]
-  , "main": "./klass.js"
-  , "ender": "./src/ender.js"
-  , "keywords": ["ender", "class", "prototype", "inheritance", "oop"]
-  , "repository": {
-      "type": "git"
-    , "url": "https://github.com/ded/klass.git"
-  }
-  , "engines": {
-      "node": ">= 0.4.0"
-  }
-  , "devDependencies": {
-        "sink-test": ">= 0.0.8"
-      , "smoosh": "0.4.x"
+  "name": "klass",
+  "description": "Class provider with classical inheritance interface",
+  "version": "1.3.1",
+  "homepage": "http://dustindiaz.com/klass",
+  "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)",
+  "contributors": [
+    "Jacob Thornton <jacob@twitter.com> (https://github.com/fat)"
+  ],
+  "main": "./klass.js",
+  "ender": "./src/ender.js",
+  "keywords": [
+    "ender",
+    "class",
+    "prototype",
+    "inheritance",
+    "oop"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ded/klass.git"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "devDependencies": {
+    "sink-test": ">= 0.0.8",
+    "smoosh": "0.4.x"
   }
 }
