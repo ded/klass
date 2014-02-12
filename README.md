@@ -1,10 +1,8 @@
-Klass
---------
+## Klass
 An expressive, cross platform JavaScript Class provider with a classical interface to prototypal inheritance.
 
-API
----------
-<h3>creating a Class...</h3>
+## API
+### creating a Class
 
 ``` js
 var Person = klass(function (name) {
@@ -19,7 +17,7 @@ var Person = klass(function (name) {
   })
 ```
 
-<h3>Subclassing...</h3>
+### Subclassing
 
 ``` js
 var SuperHuman = Person.extend(function (name) {
@@ -38,7 +36,7 @@ var SuperHuman = Person.extend(function (name) {
 new SuperHuman('Zelda').walk()
 ```
 
-<h3>Object Literals...</h3>
+### Object Literal Interface
 
 ``` js
 var Foo = klass({
@@ -58,7 +56,7 @@ var Foo = klass({
 
 *note: initialize will be called on class invocation*
 
-<h3>Implementing...</h3>
+### Implement
 
 because sometimes you want to overwrite OR mixin an instance method
 
@@ -84,63 +82,41 @@ if (beamIsDown) {
 }
 ```
 
-Environments
-------------
+## Environments
 Klass is [Common JS](http://commonjs.org) compliant and provides the [Modules 1.1](http://wiki.commonjs.org/wiki/Modules/1.1) interface to allow two flavors of development. See the implementations below:
 
-<h3>browser environment</h3>
+### Browser
 
 ``` html
 <script src="path/to/klass.js"></script>
 <!-- klass() is exposed to context -->
-
-<script type="text/javascript">
-  var Foo = klass(fn1)
-  var Bar = Foo.extend(fn2)
-  Bar.implement({ ... })
-</script>
-``` html
-
-<h3>as a module</h3>
-
-``` js
-// your-application.js
-var klass = require('path/to/klass')
-
-var Foo = klass(...)
 ```
 
-Install the Package!
---------------------
-By far the easiest way to get started with klass is to simply install the package and hit the ground running!!
+### As a node module
 
-    $ npm install klass
-
-    // in your Node application
-    var klass = require('klass')
-
-Ender compatibility
--------------
-add `klass` to your ender compilation
-
-    $ ender add klass
-
-Use it:
-
-``` js
-$.klass(...)
+``` sh
+npm install klass
 ```
 
-Developers
-----------
+``` js
+var klass = require('klass')
+```
 
-    $ npm install --dev
-    $ make
-    $ make test
+### Ender compatibility
+add `klass` to your [ender](http://enderjs.com) compilation
+
+``` sh
+ender add klass
+```
+
+### Developers
+
+``` sh
+npm install
+make
+make test
+```
 
 Keep your edits localized to `src/klass.js`
 
-Contributors
-------------
-  * [Dustin Diaz](https://github.com/ded/klass/commits/master?author=ded)
-  * [Jacob Thornton](https://github.com/ded/klass/commits/master?author=fat)
+### Happy Klassing!

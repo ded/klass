@@ -1,7 +1,7 @@
 /*!
   * klass: a classical JS OOP façade
   * https://github.com/ded/klass
-  * License MIT (c) Dustin Diaz & Jacob Thornton 2012
+  * License MIT (c) Dustin Diaz 2014
   */
 
 !function (name, context, definition) {
@@ -10,7 +10,6 @@
   else context[name] = definition()
 }('klass', this, function () {
   var context = this
-    , old = context.klass
     , f = 'function'
     , fnTest = /xyz/.test(function () {xyz}) ? /\bsupr\b/ : /.*/
     , proto = 'prototype'
@@ -86,11 +85,6 @@
     }
 
     return fn
-  }
-
-  klass.noConflict = function () {
-    context.klass = old
-    return this
   }
 
   return klass

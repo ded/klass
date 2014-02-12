@@ -4,13 +4,6 @@ if (typeof module !== 'undefined' && module.exports) {
     , sink = sink.sink
     , $k = require('../src/klass')
 }
-else {
-  sink('no conflict', function (test, ok) {
-    test('should return old klass back to context', 1, function () {
-      ok(klass() == 'success', 'old klass called')
-    })
-  })
-}
 
 sink('klass', function (test, ok, before, after) {
 
@@ -398,7 +391,7 @@ sink('klass', function (test, ok, before, after) {
       ok(true, 'did not call random initalize')
     }, 200);
   })
-  
+
   test("should reset super attribute if exception is thrown", 1, function() {
     var successFullyCalledCatcher = false
     var Base = $k({
@@ -421,7 +414,7 @@ sink('klass', function (test, ok, before, after) {
         }
       }
     })
-    
+
     var classUnderTest = new Sub()
     try { classUnderTest.catcher() } catch (ignored){}
     ok(successFullyCalledCatcher, "Got confused as to what super method to call")
