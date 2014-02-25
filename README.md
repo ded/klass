@@ -119,4 +119,7 @@ make test
 
 Keep your edits localized to `src/klass.js`
 
+## LICENSE
+    MIT
+
 ### Happy Klassing!
