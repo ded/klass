@@ -4,11 +4,11 @@
   * License MIT (c) Dustin Diaz 2014
   */
 
-!function (name, context, definition) {
-  if (typeof define == 'function') define(definition)
-  else if (typeof module != 'undefined') module.exports = definition()
+(function (name, context, definition) {
+  if (typeof module != 'undefined' && module.exports) module.exports = definition()
+  else if (typeof define == 'function' && define.amd) define(definition)
   else context[name] = definition()
-}('klass', this, function () {
+})('klass', this, function () {
   var context = this
     , f = 'function'
     , fnTest = /xyz/.test(function () {xyz}) ? /\bsupr\b/ : /.*/
