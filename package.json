@@ -1,7 +1,7 @@
 {
   "name": "klass",
   "description": "Class provider with classical inheritance interface",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "homepage": "https://github.com/ded/klass",
   "author": "Dustin Diaz <polvero@gmail.com> (http://dustindiaz.com)",
   "main": "./klass.js",
