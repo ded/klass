@@ -23,5 +23,8 @@
   "devDependencies": {
     "sink-test": ">= 0.0.8",
     "smoosh": "0.4.x"
+  },
+  "spm": {
+    "main": "klass.js"
   }
 }
